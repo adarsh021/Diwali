@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>The Festival of Lights – A Magical Diwali Experience</title>
+  
+  <!-- Meta tags for social sharing and SEO -->
+  <meta name="description" content="Experience the divine radiance of Diwali. An immersive celebration of lights, realistic 3D glowing diyas, celestial fireworks, and traditional Indian festivities.">
+  <meta name="theme-color" content="#070210">
+
+  <!-- Google Fonts: Royal Indian & Festive Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Marcellus&family=Outfit:wght@300;400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+
+  <!-- GSAP & ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Canvas Confetti for Grand Finale bursts -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="festive-body">
+
+  <!-- Preloader / Sacred Flame Invocation -->
+  <div id="experience-loader" class="experience-loader">
+    <div class="loader-content">
+      <div class="sacred-diya-loader">
+        <div class="loader-flame">
+          <div class="flame-inner"></div>
+        </div>
+        <div class="loader-diya-base"></div>
+      </div>
+      <h2 class="loader-title">Lighting the Sacred Diyas...</h2>
+      <p class="loader-subtitle">Preparing the Royal Haveli of Lights</p>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar" id="loader-progress"></div>
+      </div>
+      <button id="enter-experience-btn" class="enter-btn pulse-glow">Begin Experience ✨</button>
+    </div>
+  </div>
+
+  <!-- Audio & Interactive HUD Controls -->
+  <header class="festive-hud">
+    <div class="hud-brand">
+      <span class="om-symbol">ॐ</span>
+      <span class="brand-text">DIVYA DEEPAVALI</span>
+    </div>
+
+    <div class="hud-controls">
+      <!-- Ambient Festive Music Toggle -->
+      <button id="music-toggle-btn" class="hud-btn" aria-label="Toggle Festive Audio" title="Toggle Festive Soundscape">
+        <span class="hud-icon music-icon">🎵</span>
+        <span class="hud-label">Festive Audio: <strong id="music-state-text">OFF</strong></span>
+      </button>
+
+      <!-- Sparkler Cursor Toggle -->
+      <button id="sparkler-toggle-btn" class="hud-btn" aria-label="Toggle Sparkler Wand Cursor" title="Magic Sparkler Phuljhadi">
+        <span class="hud-icon">✨</span>
+        <span class="hud-label">Sparkler Wand</span>
+      </button>
+
+      <!-- Quick Action: Light a Diya -->
+      <button id="hud-light-diya-btn" class="hud-btn primary-glow-btn">
+        <span class="hud-icon">🪔</span>
+        <span>Light a Diya</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Interactive Floating Background Canvases -->
+  <!-- 1. Starry Night Sky & Nebulae -->
+  <canvas id="sky-canvas" class="fixed-canvas sky-canvas"></canvas>
+  <!-- 2. Fireworks Physics Engine -->
+  <canvas id="fireworks-canvas" class="fixed-canvas fireworks-canvas"></canvas>
+  <!-- 3. Floating Golden Embers & Dust -->
+  <canvas id="sparks-canvas" class="fixed-canvas sparks-canvas"></canvas>
+  <!-- 4. Interactive Phuljhadi (Sparkler Cursor) Canvas -->
+  <canvas id="sparkler-cursor-canvas" class="fixed-canvas cursor-canvas"></canvas>
+
+  <!-- Dynamic Hanging Marigold Torans (Garlands) Across Top -->
+  <div class="marigold-toran-container" aria-hidden="true">
+    <div class="toran-string toran-left"></div>
+    <div class="toran-string toran-center"></div>
+    <div class="toran-string toran-right"></div>
+  </div>
+
+  <!-- Hanging Akash Kandils (Traditional Diwali Paper Lanterns) -->
+  <div class="floating-lanterns-layer" aria-hidden="true">
+    <div class="hanging-lantern lantern-1 sway-slow">
+      <div class="lantern-string"></div>
+      <div class="lantern-body">
+        <div class="lantern-star"></div>
+        <div class="lantern-glow"></div>
+        <div class="lantern-tassels"></div>
+      </div>
+    </div>
+    <div class="hanging-lantern lantern-2 sway-medium">
+      <div class="lantern-string"></div>
+      <div class="lantern-body">
+        <div class="lantern-star"></div>
+        <div class="lantern-glow"></div>
+        <div class="lantern-tassels"></div>
+      </div>
+    </div>
+    <div class="hanging-lantern lantern-3 sway-fast">
+      <div class="lantern-string"></div>
+      <div class="lantern-body">
+        <div class="lantern-star"></div>
+        <div class="lantern-glow"></div>
+        <div class="lantern-tassels"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN SCROLLABLE WRAPPER -->
+  <main class="page-container">
+
+    <!-- ==========================================
+         SECTION 1: HERO SECTION – MAGICAL DIWALI NIGHT
+         ========================================== -->
+    <section id="hero-section" class="scene-section hero-section">
+      
+      <!-- Royal Indian Palace / Haveli Silhouette Silhouette Layer -->
+      <div class="palace-backdrop-layer">
+        <!-- SVG Vector of Royal Rajasthani Haveli with Jali Windows & Domes -->
+        <svg class="palace-svg" viewBox="0 0 1440 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="palaceGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#14062a" stop-opacity="0.85" />
+              <stop offset="60%" stop-color="#0a0316" stop-opacity="0.95" />
+              <stop offset="100%" stop-color="#05010b" stop-opacity="1" />
+            </linearGradient>
+            <radialGradient id="windowGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffde70" stop-opacity="1" />
+              <stop offset="60%" stop-color="#ff9d14" stop-opacity="0.8" />
+              <stop offset="100%" stop-color="#ff5100" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          
+          <!-- Distant Minarets and Chhatris -->
+          <g class="palace-silhouettes">
+            <!-- Left Wing -->
+            <path d="M0,600 L0,320 L40,320 L40,260 Q50,220 60,260 L60,320 L110,320 L110,230 Q130,170 150,230 L150,320 L210,320 L210,280 Q230,250 250,280 L250,320 L320,320 L320,200 Q360,120 400,200 L400,320 L480,320 L480,360 L540,360 L540,600 Z" fill="url(#palaceGrad)" />
+            <!-- Center Grand Haveli Arch & Central Domes -->
+            <path d="M520,600 L520,290 L570,290 L570,220 Q610,130 650,220 L650,290 L680,290 L680,180 Q720,80 760,180 L760,290 L790,290 L790,220 Q830,130 870,220 L870,290 L920,290 L920,600 Z" fill="url(#palaceGrad)" />
+            <!-- Right Wing -->
+            <path d="M900,600 L900,360 L960,360 L960,320 L1040,320 L1040,200 Q1080,120 1120,200 L1120,320 L1190,320 L1190,280 Q1210,250 1230,280 L1230,320 L1290,320 L1290,230 Q1310,170 1330,230 L1330,320 L1380,320 L1380,260 Q1390,220 1400,260 L1400,320 L1440,320 L1440,600 Z" fill="url(#palaceGrad)" />
+          </g>
+
+          <!-- Glowing Jali Palace Windows -->
+          <g class="palace-windows">
+            <rect x="125" y="245" width="10" height="20" rx="5" fill="url(#windowGlow)" class="palace-window-flicker" />
+            <rect x="225" y="290" width="10" height="18" rx="5" fill="url(#windowGlow)" class="palace-window-flicker delay-1" />
+            <rect x="350" y="225" width="20" height="35" rx="8" fill="url(#windowGlow)" class="palace-window-flicker delay-2" />
+            <rect x="600" y="240" width="18" height="30" rx="8" fill="url(#windowGlow)" class="palace-window-flicker delay-3" />
+            <rect x="710" y="200" width="22" height="40" rx="10" fill="url(#windowGlow)" class="palace-window-flicker delay-1" />
+            <rect x="820" y="240" width="18" height="30" rx="8" fill="url(#windowGlow)" class="palace-window-flicker delay-2" />
+            <rect x="1070" y="225" width="20" height="35" rx="8" fill="url(#windowGlow)" class="palace-window-flicker delay-3" />
+            <rect x="1205" y="290" width="10" height="18" rx="5" fill="url(#windowGlow)" class="palace-window-flicker" />
+            <rect x="1305" y="245" width="10" height="20" rx="5" fill="url(#windowGlow)" class="palace-window-flicker delay-2" />
+          </g>
+        </svg>
+
+        <!-- Royal Marble Terrace / Balcony Balustrade -->
+        <div class="palace-balustrade"></div>
+      </div>
+
+      <!-- Hero Cinematic Golden Typography -->
+      <div class="hero-content">
+        <div class="sacred-crest" data-speed="0.2">
+          <span class="crest-leaf">🌿</span>
+          <span class="crest-badge">शुभ दीपावली • AUSPICIOUS FESTIVAL</span>
+          <span class="crest-leaf">🌿</span>
+        </div>
+
+        <h1 class="hero-main-title golden-shimmer-text">
+          <span class="title-word word-happy">Happy</span>
+          <span class="title-word word-diwali">Diwali</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          May the Festival of Lights Fill Your Life With Happiness & Prosperity.
+        </p>
+
+        <div class="hero-actions">
+          <button id="hero-celebrate-btn" class="festive-btn gold-btn pulse-glow">
+            <span class="btn-sparkle">✨</span>
+            <span class="btn-text">Burst Fireworks & Celebrate</span>
+            <span class="btn-glow"></span>
+          </button>
+          
+          <button id="hero-light-main-btn" class="festive-btn saffron-btn">
+            <span class="btn-sparkle">🪔</span>
+            <span class="btn-text">Kindle the Maha Diya</span>
+          </button>
+        </div>
+
+        <!-- Scroll down indicator -->
+        <div class="scroll-down-hint">
+          <span>Scroll to Explore the Magic</span>
+          <div class="hint-chevron"></div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           THE CENTRAL GIANT MAHA DIYA (Sacred Lamp)
+           ========================================== -->
+      <div class="maha-diya-stage" id="maha-diya-stage">
+        <!-- Giant Ambient Glow Cast On Ground and Surrounding Air -->
+        <div class="ambient-ground-illumination"></div>
+        <div class="volumetric-light-shaft"></div>
+
+        <!-- The Central Realistic 3D Maha Diya -->
+        <div class="maha-diya-container interactive-diya is-lit" id="central-maha-diya" title="Click to interact with the Sacred Flame!">
+          
+          <!-- Heat Distortion / Corona Glow -->
+          <div class="flame-corona"></div>
+
+          <!-- Multi-Layer Realistic Flame -->
+          <div class="realistic-flame-wrapper">
+            <div class="flame-smoke"></div>
+            <!-- Outer Saffron Halo -->
+            <div class="flame-outer"></div>
+            <!-- Middle Golden Incandescence -->
+            <div class="flame-middle"></div>
+            <!-- Inner Intense White-Yellow Body -->
+            <div class="flame-inner-core"></div>
+            <!-- Blue Oxygen Hot Base Cone -->
+            <div class="flame-blue-base"></div>
+            <!-- Dancing Sparks from Flame -->
+            <div class="flame-sparks">
+              <span class="f-spark s1"></span>
+              <span class="f-spark s2"></span>
+              <span class="f-spark s3"></span>
+              <span class="f-spark s4"></span>
+            </div>
+          </div>
+
+          <!-- Realistic Cotton Wick (Batti) -->
+          <div class="diya-wick"></div>
+
+          <!-- 3D Terracotta / Brass Diya Body -->
+          <div class="diya-clay-body">
+            <!-- Brass Filigree & Carved Pattern Overlay -->
+            <div class="diya-rim-ornament"></div>
+            <div class="diya-oil-pool">
+              <div class="oil-reflection"></div>
+            </div>
+            <div class="diya-base-shadow"></div>
+          </div>
+
+          <!-- Interactive Flame Click Pulse -->
+          <div class="click-pulse-ring"></div>
+        </div>
+
+        <!-- Orbiting / Surrounding Constellation of Small Diyas -->
+        <div class="orbiting-diyas-ring" id="hero-orbit-diyas">
+          <!-- Small Diya 1 -->
+          <div class="orbit-diya orbit-pos-1 interactive-diya is-lit">
+            <div class="mini-flame"><div class="mini-flame-core"></div></div>
+            <div class="mini-diya-body"></div>
+          </div>
+          <!-- Small Diya 2 -->
+          <div class="orbit-diya orbit-pos-2 interactive-diya is-lit">
+            <div class="mini-flame"><div class="mini-flame-core"></div></div>
+            <div class="mini-diya-body"></div>
+          </div>
+          <!-- Small Diya 3 -->
+          <div class="orbit-diya orbit-pos-3 interactive-diya is-lit">
+            <div class="mini-flame"><div class="mini-flame-core"></div></div>
+            <div class="mini-diya-body"></div>
+          </div>
+          <!-- Small Diya 4 -->
+          <div class="orbit-diya orbit-pos-4 interactive-diya is-lit">
+            <div class="mini-flame"><div class="mini-flame-core"></div></div>
+            <div class="mini-diya-body"></div>
+          </div>
+          <!-- Small Diya 5 -->
+          <div class="orbit-diya orbit-pos-5 interactive-diya is-lit">
+            <div class="mini-flame"><div class="mini-flame-core"></div></div>
+            <div class="mini-diya-body"></div>
+          </div>
+          <!-- Small Diya 6 -->
+          <div class="orbit-diya orbit-pos-6 interactive-diya is-lit">
+            <div class="mini-flame"><div class="mini-flame-core"></div></div>
+            <div class="mini-diya-body"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 2: REALISTIC DIYA SANCTUARY & ILLUMINATION
+         (Scroll-triggered gradual illumination)
+         ========================================== -->
+    <section id="diya-sanctuary-section" class="scene-section sanctuary-section">
+      <div class="section-header-wrap">
+        <span class="section-tag">THE SACRED FLAME</span>
+        <h2 class="section-title">Kindling the Eternal Diyas</h2>
+        <p class="section-description">
+          Each Diya represents the triumph of light over darkness, wisdom over ignorance, and hope over despair. 
+          Scroll down and tap each Diya to awaken its divine flame and spread golden warmth.
+        </p>
+      </div>
+
+      <!-- Interactive Diya Walkway / Courtyard Grid -->
+      <div class="diya-sanctuary-grid" id="sanctuary-grid">
+        
+        <!-- Diya Card 1: Peace & Serenity -->
+        <div class="diya-shrine-card scroll-illuminate" data-diya-id="1">
+          <div class="shrine-arch">
+            <div class="shrine-diya-wrap interactive-diya">
+              <div class="shrine-flame">
+                <div class="shrine-flame-outer"></div>
+                <div class="shrine-flame-core"></div>
+              </div>
+              <div class="shrine-wick"></div>
+              <div class="shrine-diya-bowl"></div>
+              <div class="shrine-glow-field"></div>
+            </div>
+          </div>
+          <div class="shrine-info">
+            <span class="shrine-sanskrit">शांति • Shanti</span>
+            <h3 class="shrine-title">Flame of Peace</h3>
+            <p class="shrine-text">Illuminating inner calm, harmony, and tranquil bliss across every home.</p>
+            <button class="light-this-btn" data-target="1">Ignite Flame ✨</button>
+          </div>
+        </div>
+
+        <!-- Diya Card 2: Prosperity & Abundance -->
+        <div class="diya-shrine-card scroll-illuminate" data-diya-id="2">
+          <div class="shrine-arch">
+            <div class="shrine-diya-wrap interactive-diya">
+              <div class="shrine-flame">
+                <div class="shrine-flame-outer"></div>
+                <div class="shrine-flame-core"></div>
+              </div>
+              <div class="shrine-wick"></div>
+              <div class="shrine-diya-bowl"></div>
+              <div class="shrine-glow-field"></div>
+            </div>
+          </div>
+          <div class="shrine-info">
+            <span class="shrine-sanskrit">समृद्धि • Samriddhi</span>
+            <h3 class="shrine-title">Flame of Prosperity</h3>
+            <p class="shrine-text">Welcoming Goddess Lakshmi's sacred blessings of abundance, wealth, and success.</p>
+            <button class="light-this-btn" data-target="2">Ignite Flame ✨</button>
+          </div>
+        </div>
+
+        <!-- Diya Card 3: Wisdom & Knowledge -->
+        <div class="diya-shrine-card scroll-illuminate" data-diya-id="3">
+          <div class="shrine-arch">
+            <div class="shrine-diya-wrap interactive-diya">
+              <div class="shrine-flame">
+                <div class="shrine-flame-outer"></div>
+                <div class="shrine-flame-core"></div>
+              </div>
+              <div class="shrine-wick"></div>
+              <div class="shrine-diya-bowl"></div>
+              <div class="shrine-glow-field"></div>
+            </div>
+          </div>
+          <div class="shrine-info">
+            <span class="shrine-sanskrit">ज्ञान • Jnana</span>
+            <h3 class="shrine-title">Flame of Wisdom</h3>
+            <p class="shrine-text">Dispelling the shadows of ignorance and lighting the path to enlightened truth.</p>
+            <button class="light-this-btn" data-target="3">Ignite Flame ✨</button>
+          </div>
+        </div>
+
+        <!-- Diya Card 4: Joy & Celebration -->
+        <div class="diya-shrine-card scroll-illuminate" data-diya-id="4">
+          <div class="shrine-arch">
+            <div class="shrine-diya-wrap interactive-diya">
+              <div class="shrine-flame">
+                <div class="shrine-flame-outer"></div>
+                <div class="shrine-flame-core"></div>
+              </div>
+              <div class="shrine-wick"></div>
+              <div class="shrine-diya-bowl"></div>
+              <div class="shrine-glow-field"></div>
+            </div>
+          </div>
+          <div class="shrine-info">
+            <span class="shrine-sanskrit">आनंद • Ananda</span>
+            <h3 class="shrine-title">Flame of Eternal Joy</h3>
+            <p class="shrine-text">Spreading festive warmth, togetherness, and heartfelt laughter with family.</p>
+            <button class="light-this-btn" data-target="4">Ignite Flame ✨</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Real-time Community Diya Lighting Counter -->
+      <div class="diya-counter-banner">
+        <div class="counter-badge">
+          <span class="counter-icon pulse-glow">🪔</span>
+          <span class="counter-number" id="global-diya-counter">12,488</span>
+        </div>
+        <p class="counter-label">Diyas lit by celebrators worldwide this Deepavali season.</p>
+        <button id="counter-light-action-btn" class="festive-btn gold-btn">
+          <span>Light Another Diya Now (+1)</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 3: GRAND DIWALI CELEBRATION & RANGOLI MANDALA
+         ========================================== -->
+    <section id="grand-celebration-section" class="scene-section celebration-section">
+      <div class="section-header-wrap">
+        <span class="section-tag">FESTIVE SPLENDOR</span>
+        <h2 class="section-title">Royal Courtyard Celebration</h2>
+        <p class="section-description">
+          Step into the vibrant celebration adorned with sacred Rangoli art, fragrant marigold garlands, shimmering Akash Kandils, and joyous festivities.
+        </p>
+      </div>
+
+      <!-- The Grand Rotating Rangoli Mandala Stage -->
+      <div class="grand-rangoli-stage">
+        
+        <!-- Rotating SVG Sacred Mandala Rangoli -->
+        <div class="rangoli-mandala-wrapper" id="rangoli-mandala">
+          <svg class="rangoli-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="rangoliGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffe600" />
+                <stop offset="50%" stop-color="#ff8c00" />
+                <stop offset="100%" stop-color="#ff1a55" />
+              </linearGradient>
+              <linearGradient id="rangoliPeacock" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f2fe" />
+                <stop offset="50%" stop-color="#4facfe" />
+                <stop offset="100%" stop-color="#6b11ff" />
+              </linearGradient>
+              <radialGradient id="rangoliCenterGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fff5cc" stop-opacity="0.9" />
+                <stop offset="40%" stop-color="#ff9900" stop-opacity="0.5" />
+                <stop offset="100%" stop-color="#990033" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+
+            <!-- Rangoli Outer Rim & Petals -->
+            <circle cx="300" cy="300" r="280" fill="none" stroke="url(#rangoliGold)" stroke-width="4" stroke-dasharray="8 6" opacity="0.8" />
+            <circle cx="300" cy="300" r="260" fill="none" stroke="#ff3e6c" stroke-width="2" opacity="0.7" />
+            
+            <!-- 16 Radial Lotus Petals -->
+            <g class="mandala-petals-outer">
+              <path d="M300,40 Q330,120 300,160 Q270,120 300,40 Z" fill="#ff2a5f" opacity="0.85" />
+              <path d="M484,116 Q454,196 414,186 Q424,146 484,116 Z" fill="#ff7a00" opacity="0.85" />
+              <path d="M560,300 Q480,330 440,300 Q480,270 560,300 Z" fill="#ff2a5f" opacity="0.85" />
+              <path d="M484,484 Q414,454 424,414 Q454,424 484,484 Z" fill="#ff7a00" opacity="0.85" />
+              <path d="M300,560 Q270,480 300,440 Q330,480 300,560 Z" fill="#ff2a5f" opacity="0.85" />
+              <path d="M116,484 Q146,414 186,424 Q176,454 116,484 Z" fill="#ff7a00" opacity="0.85" />
+              <path d="M40,300 Q120,270 160,300 Q120,330 40,300 Z" fill="#ff2a5f" opacity="0.85" />
+              <path d="M116,116 Q186,146 176,186 Q146,176 116,116 Z" fill="#ff7a00" opacity="0.85" />
+            </g>
+
+            <!-- Intermediate Geometric Ring -->
+            <circle cx="300" cy="300" r="190" fill="#290747" stroke="url(#rangoliGold)" stroke-width="3" />
+            <polygon points="300,110 355,245 490,300 355,355 300,490 245,355 110,300 245,245" fill="none" stroke="#ffd700" stroke-width="2.5" />
+            <polygon points="300,130 420,180 470,300 420,420 300,470 180,420 130,300 180,180" fill="none" stroke="#ff007f" stroke-width="1.5" />
+
+            <!-- Inner Floral Bloom -->
+            <g class="mandala-petals-inner">
+              <circle cx="300" cy="220" r="30" fill="url(#rangoliPeacock)" opacity="0.8" />
+              <circle cx="357" cy="243" r="30" fill="url(#rangoliPeacock)" opacity="0.8" />
+              <circle cx="380" cy="300" r="30" fill="url(#rangoliPeacock)" opacity="0.8" />
+              <circle cx="357" cy="357" r="30" fill="url(#rangoliPeacock)" opacity="0.8" />
+              <circle cx="300" cy="380" r="30" fill="url(#rangoliPeacock)" opacity="0.8" />
+              <circle cx="243" cy="357" r="30" fill="url(#rangoliPeacock)" opacity="0.8" />
+              <circle cx="220" cy="300" r="30" fill="url(#rangoliPeacock)" opacity="0.8" />
+              <circle cx="243" cy="243" r="30" fill="url(#rangoliPeacock)" opacity="0.8" />
+            </g>
+
+            <!-- Center Sacred Star -->
+            <circle cx="300" cy="300" r="60" fill="url(#rangoliGold)" />
+            <circle cx="300" cy="300" r="45" fill="#5c0032" />
+            <circle cx="300" cy="300" r="30" fill="url(#rangoliCenterGlow)" />
+            <circle cx="300" cy="300" r="10" fill="#ffffff" />
+          </svg>
+
+          <!-- 8 Surrounding Rangoli Border Diyas -->
+          <div class="rangoli-diyas-constellation">
+            <div class="r-diya r-diya-n is-lit"><div class="mini-flame"></div><div class="mini-diya-body"></div></div>
+            <div class="r-diya r-diya-ne is-lit"><div class="mini-flame"></div><div class="mini-diya-body"></div></div>
+            <div class="r-diya r-diya-e is-lit"><div class="mini-flame"></div><div class="mini-diya-body"></div></div>
+            <div class="r-diya r-diya-se is-lit"><div class="mini-flame"></div><div class="mini-diya-body"></div></div>
+            <div class="r-diya r-diya-s is-lit"><div class="mini-flame"></div><div class="mini-diya-body"></div></div>
+            <div class="r-diya r-diya-sw is-lit"><div class="mini-flame"></div><div class="mini-diya-body"></div></div>
+            <div class="r-diya r-diya-w is-lit"><div class="mini-flame"></div><div class="mini-diya-body"></div></div>
+            <div class="r-diya r-diya-nw is-lit"><div class="mini-flame"></div><div class="mini-diya-body"></div></div>
+          </div>
+        </div>
+
+        <!-- Festive Celebration Features Showcase -->
+        <div class="festive-features-row">
+          
+          <div class="feature-glass-card">
+            <div class="feature-icon-bubble">🪔</div>
+            <h4>Sacred Deepavali Aarti</h4>
+            <p>Every lit lamp purifies the air and spreads joyous sanctity throughout your abode.</p>
+          </div>
+
+          <div class="feature-glass-card">
+            <div class="feature-icon-bubble">🌸</div>
+            <h4>Marigold & Rangoli Grace</h4>
+            <p>Artistic floor mandalas infused with natural powders and fresh genda phool welcoming guests.</p>
+          </div>
+
+          <div class="feature-glass-card">
+            <div class="feature-icon-bubble">🎆</div>
+            <h4>Celestial Sky Atishbaji</h4>
+            <p>Dazzling night sky bursts celebrating Lord Rama's triumphant return to Ayodhya.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 4: INTERACTIVE FESTIVE ARENA
+         - Send a Sky Lantern (Akash Deep)
+         - Personalized Diwali Blessing Card
+         ========================================== -->
+    <section id="interactive-arena-section" class="scene-section arena-section">
+      <div class="section-header-wrap">
+        <span class="section-tag">SHARE THE LIGHT</span>
+        <h2 class="section-title">Interactive Celebration Pavilion</h2>
+        <p class="section-description">
+          Send a floating Sky Lantern carrying your heartfelt prayers to the stars, or design a customized golden Diwali blessing card for your loved ones.
+        </p>
+      </div>
+
+      <div class="interactive-grid">
+        
+        <!-- Interactive Card 1: Launch Sky Wish Lantern -->
+        <div class="interactive-panel lantern-launch-panel">
+          <div class="panel-badge">TRADITIONAL RITUAL</div>
+          <h3>Release a Sky Lantern 🏮</h3>
+          <p>Imbue your lantern with a Diwali prayer and release it into the celestial sky.</p>
+          
+          <div class="lantern-input-group">
+            <label for="lantern-wish-input">Your Diwali Wish / Prayer:</label>
+            <input type="text" id="lantern-wish-input" placeholder="e.g., Health, Happiness & Peace for Family" maxlength="60">
+          </div>
+
+          <button id="launch-lantern-btn" class="festive-btn gold-btn">
+            <span class="btn-sparkle">🏮</span>
+            <span>Launch Wish Lantern into Night Sky</span>
+          </button>
+          <div id="lantern-launch-status" class="launch-status-msg"></div>
+        </div>
+
+        <!-- Interactive Card 2: Custom Diwali Greeting Card Generator -->
+        <div class="interactive-panel greeting-generator-panel">
+          <div class="panel-badge">PERSONALIZED BLESSING</div>
+          <h3>Create Your Diwali Greeting ✨</h3>
+          <p>Personalize this golden royal greeting card and share it instantly.</p>
+
+          <div class="greeting-form">
+            <div class="greeting-field">
+              <label for="sender-name-input">Your Name:</label>
+              <input type="text" id="sender-name-input" placeholder="Enter your name" value="Adarsh & Family">
+            </div>
+
+            <div class="greeting-field">
+              <label for="receiver-name-input">Wishing (Recipient Name):</label>
+              <input type="text" id="receiver-name-input" placeholder="e.g., Everyone, Dear Friends, Family" value="You & Your Family">
+            </div>
+          </div>
+
+          <!-- Preview Greeting Card -->
+          <div class="custom-card-preview" id="custom-card-preview">
+            <div class="card-border-ornament"></div>
+            <div class="card-inner">
+              <div class="card-om">ॐ शुभ दीपावली ॐ</div>
+              <h4 class="card-title">Happy Deepavali</h4>
+              <p class="card-message">
+                "May the divine glow of diyas illuminate your life with infinite joy, good health, peace, and prosperity."
+              </p>
+              <div class="card-signatures">
+                <span class="card-to">Warmest Wishes To: <strong id="preview-to">You & Your Family</strong></span>
+                <span class="card-from">From: <strong id="preview-from">Adarsh & Family</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-buttons">
+            <button id="copy-greeting-btn" class="festive-btn saffron-btn">
+              <span>📋 Copy Festive Message</span>
+            </button>
+            <button id="firework-shower-btn" class="festive-btn gold-btn">
+              <span>🎆 Shower Celebration Sparks</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 5: FINAL CELEBRATION SECTION
+         "✨ Wishing You and Your Family a Very Happy Diwali! 🪔"
+         Hundreds of glowing diyas & grand fireworks
+         ========================================== -->
+    <section id="grand-finale-section" class="scene-section finale-section">
+      <div class="finale-glow-orb"></div>
+      
+      <!-- Sea of Hundreds of Glowing Diyas at the Horizon -->
+      <div class="sea-of-diyas" id="sea-of-diyas" aria-hidden="true">
+        <!-- Generated dynamically via JS to create 100+ twinkling golden diyas across the panoramic horizon -->
+      </div>
+
+      <div class="finale-content">
+        <div class="finale-sacred-icon">🪔 ✨ 🪔</div>
+
+        <!-- Grand Animated Message Specified in Prompt -->
+        <h2 class="finale-grand-message golden-shimmer-text">
+          ✨ Wishing You and Your Family a Very Happy Diwali! 🪔
+        </h2>
+
+        <p class="finale-blessing-quote">
+          "As the sacred light of Deepavali dispels all darkness, may your year ahead be blessed with radiant health, limitless abundance, sweet festivities, and everlasting joy."
+        </p>
+
+        <!-- Final Mega Celebration Trigger -->
+        <div class="finale-actions">
+          <button id="mega-fireworks-btn" class="festive-btn gold-btn mega-btn pulse-glow">
+            <span class="btn-sparkle">🎆</span>
+            <span>Ignite Grand Fireworks Show</span>
+            <span class="btn-glow"></span>
+          </button>
+          
+          <button id="scroll-to-top-btn" class="festive-btn glass-btn">
+            <span>Return to Royal Haveli ↑</span>
+          </button>
+        </div>
+
+        <div class="traditional-shloka">
+          <span class="shloka-text">असतो मा सद्गमय । तमसो मा ज्योतिर्गमय । मृत्योर्मा अमृतं गमय ॥</span>
+          <span class="shloka-trans">"Lead us from darkness unto light, from falsehood unto truth, from mortality unto immortality."</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Royal Footer -->
+    <footer class="festive-footer">
+      <div class="footer-lights-row"></div>
+      <p class="footer-credit">
+        Deepavali Mahotsav • Crafted with pure devotion, lights & festive joy.
+      </p>
+    </footer>
+
+  </main>
+
+  <!-- Interactive Light-A-Diya Click Placement Overlay Modal / Toast -->
+  <div id="diya-placement-toast" class="festive-toast">
+    <span class="toast-icon">🪔</span>
+    <span class="toast-text">Click anywhere on the screen to place a glowing Diya!</span>
+    <button id="toast-close" class="toast-close">✕</button>
+  </div>
+
+  <!-- Audio Synthesizer Status Indicator -->
+  <div id="audio-indicator" class="audio-pulse-indicator" aria-hidden="true">
+    <span class="bar b1"></span>
+    <span class="bar b2"></span>
+    <span class="bar b3"></span>
+    <span class="bar b4"></span>
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
